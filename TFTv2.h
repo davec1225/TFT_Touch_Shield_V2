@@ -19,6 +19,9 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
+
+// 5-18-2015 Added directional code Originally for V1 Seeed TFT Touch
+
 #ifndef TFTv2_h
 #define TFTv2_h
 
@@ -45,6 +48,12 @@
 #define BRIGHT_RED	0xf810	
 #define GRAY1		0x8410  
 #define GRAY2		0x4208  
+
+/**Macro definitions for char display direction**/
+#define LEFT2RIGHT 0
+#define DOWN2UP    1
+#define RIGHT2LEFT 2
+#define UP2DOWN    3
 
 //TFT resolution 240*320
 #define MIN_X	0
@@ -121,6 +130,9 @@ extern INT8U simpleFont[][8];
 
 class TFT
 {
+private:
+    unsigned char DisplayDirect;
+	void exitStandBy(void);
 
 public:
 
@@ -184,15 +196,19 @@ public:
     }
 
     
-	void TFTinit (void);
-	void setCol(INT16U StartCol,INT16U EndCol);
-	void setPage(INT16U StartPage,INT16U EndPage);
-	void setXY(INT16U poX, INT16U poY);
+    void init (void);
+    void TFTinit (void);
+    void setCol(INT16U StartCol,INT16U EndCol);
+    void setPage(INT16U StartPage,INT16U EndPage);
+    void setXY(INT16U poX, INT16U poY);
     void setPixel(INT16U poX, INT16U poY,INT16U color);
+    void setDisplayDirect(unsigned char = LEFT2RIGHT);
+    void setOrientation(unsigned int HV);
 	
-	void fillScreen(INT16U XL,INT16U XR,INT16U YU,INT16U YD,INT16U color);
-	void fillScreen(void);
-	INT8U readID(void);
+    void paintScreenBlack(void);
+    void fillScreen(INT16U XL,INT16U XR,INT16U YU,INT16U YD,INT16U color);
+    void fillScreen(void);
+    INT8U readID(void);
 	
 	void drawChar(INT8U ascii,INT16U poX, INT16U poY,INT16U size, INT16U fgcolor);
     void drawString(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
@@ -201,17 +217,17 @@ public:
         drawString((char*)string, poX, poY, size, fgcolor);
     }
     
-	void fillRectangle(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
+    void fillRectangle(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
 	
-	void drawLine(INT16U x0,INT16U y0,INT16U x1,INT16U y1,INT16U color);
+    void drawLine(INT16U x0,INT16U y0,INT16U x1,INT16U y1,INT16U color);
     void drawVerticalLine(INT16U poX, INT16U poY,INT16U length,INT16U color);
     void drawHorizontalLine(INT16U poX, INT16U poY,INT16U length,INT16U color);
     void drawRectangle(INT16U poX, INT16U poY, INT16U length,INT16U width,INT16U color);
 	
-	void drawCircle(int poX, int poY, int r,INT16U color);
+    void drawCircle(int poX, int poY, int r,INT16U color);
     void fillCircle(int poX, int poY, int r,INT16U color);
 	
-	void drawTriangle(int poX1, int poY1, int poX2, int poY2, int poX3, int poY3, INT16U color);
+    void drawTriangle(int poX1, int poY1, int poX2, int poY2, int poX3, int poY3, INT16U color);
     INT8U drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
     INT8U drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
     INT8U drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
